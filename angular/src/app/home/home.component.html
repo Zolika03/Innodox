@@ -1,0 +1,53 @@
+<div>
+	<h3>Kölcsönözhető könyvek</h3>
+<form>
+<div class="mt-3">
+  <div class="form-group form-inline">
+      Keresés: <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="bookService.searchTerm"/>
+      <span class="ml-3" *ngIf="bookService.loading$ | async">Kérjük, várjon...</span>
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col" sortable="id" (sort)="onSort($event)">#</th>
+      <th scope="col" sortable="title" (sort)="onSort($event)">Cím</th>
+      <th scope="col" sortable="authors" (sort)="onSort($event)">Szerző</th>
+      <th scope="col" sortable="publisher" (sort)="onSort($event)">Kiadó</th>
+      <th scope="col" sortable="category" (sort)="onSort($event)">Kategória</th>
+      <th scope="col" sortable="quantity" (sort)="onSort($event)">Elérhető(db)</th>
+      <th scope="col">Akció</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let book of books$ | async">
+      <th scope="row">{{ book.id }}</th>
+      <td>
+        <ngb-highlight [result]="book.title" [term]="bookService.searchTerm"></ngb-highlight>
+      </td>
+      <td><ngb-highlight [result]="book.authors" [term]="bookService.searchTerm"></ngb-highlight></td>
+      <td><ngb-highlight [result]="book.publisher" [term]="bookService.searchTerm"></ngb-highlight></td>
+      <td><ngb-highlight [result]="book.category" [term]="bookService.searchTerm"></ngb-highlight></td>
+      <td><ngb-highlight [result]="book.quantity | number" [term]="bookService.searchTerm"></ngb-highlight></td>
+      <td>
+      	<button class="btn btn-lg btn-outline-primary" *ngIf="book.quantity>0" (click)="borrow(book.id)">Kölcsönöz</button><span *ngIf="book.quantity==0">Nem elérhető</span>
+      	<button class="btn btn-lg btn-outline-secondary" (click)="openPreface(book.preface)">Előszó</button>
+      	</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-between p-2">
+    <ngb-pagination
+      [collectionSize]="total$ | async" [(page)]="bookService.page" [pageSize]="bookService.pageSize">
+    </ngb-pagination>
+
+    <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="bookService.pageSize">
+      <option [ngValue]="2">2 elem oldalanként</option>
+      <option [ngValue]="4">4 elem oldalanként</option>
+      <option [ngValue]="6">6 elem oldalanként</option>
+    </select>
+  </div>
+</div>
+</form>
+</div>

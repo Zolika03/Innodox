@@ -1,0 +1,30 @@
+<div>
+	<h3>Kölcsönzött könyvek</h3>
+	<table class="table table-striped">
+	  <thead>
+	  <tr>
+	    <th scope="col">#</th>
+	    <th scope="col">Cím</th>
+	    <th scope="col">Szerző</th>
+	    <th scope="col">Kiadó</th>
+	    <th scope="col">Kategória</th>
+	    <th scope="col">Akció</th>
+	  </tr>
+	  </thead>
+	  <tbody>
+	  <tr *ngFor="let book of books index as i">
+	    <th scope="row">{{ i + 1 }}</th>
+	    <td>
+	      {{ book.title }}
+	    </td>
+	    <td>{{ book.authors }}</td>
+	    <td>{{ book.publisher }}</td>
+	    <td>{{ book.category }}</td>
+	    <td>
+	        <button class="btn btn-lg btn-outline-primary" (click)="restore(book.id)">Visszaad</button>
+	      	<button class="btn btn-lg btn-outline-secondary" (click)="openContent(book.content)">Tartalom</button>
+	    </td>
+	  </tr>
+	  </tbody>
+  </table>
+</div>
