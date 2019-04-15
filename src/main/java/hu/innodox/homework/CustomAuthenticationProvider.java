@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = this.bCryptPasswordEncoder().encode(authentication.getCredentials().toString());
 
         Optional<User> user = userRepository.findByEmail(email);
-        if (!user.isPresent()) {
+        if (!user.isPresent() && !password.equals(this.bCryptPasswordEncoder().encode(user.get().getPassword()))) {
         	return null;
         }
         

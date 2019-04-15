@@ -1,8 +1,13 @@
 package hu.innodox.homework.controller;
 
+import java.util.Collection;
 import java.util.Optional;
 
+import javax.activity.InvalidActivityException;
+import javax.persistence.EntityExistsException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +20,7 @@ import hu.innodox.homework.model.User;
 import hu.innodox.homework.repository.BookRepository;
 import hu.innodox.homework.repository.UserRepository;
 
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 public class LibraryController {
 	
@@ -65,6 +71,11 @@ public class LibraryController {
 		Optional<User> user = this.userRepository.findByEmail(borrowDTO.getEmail());
 		Optional<Book> book = this.bookRepository.findById(borrowDTO.getBookId());
 		System.out.println("book: "+ book.get().getTitle());
+		System.out.println("user.get().getBooks(): " + user.get().getBooks().size());
+		if (user.get().getBooks().contains(book.get())) {
+			throw new EntityExistsException();
+		}
+			
 		book.get().setQuantity(book.get().getQuantity()-1);
 		user.get().getBooks().add(book.get());
 		this.userRepository.save(user.get());
@@ -80,8 +91,9 @@ public class LibraryController {
 		Optional<Book> book = this.bookRepository.findById(borrowDTO.getBookId());
 		System.out.println("book: "+ book.get().getTitle());
 		book.get().setQuantity(book.get().getQuantity()+1);
-		user.get().getBooks().remove(book);
+		user.get().getBooks().remove(book.get());
 		this.userRepository.save(user.get());
+		this.bookRepository.save(book.get());
 	}
 	
 }
