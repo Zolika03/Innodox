@@ -13,5 +13,6 @@ Backend start:
 Frontend start:
 > cd angular
 
+> npm install
 
 > npm run start
