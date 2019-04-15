@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+    innodoxhomework:
+        image: innodox-homework
+        ports:
+             -  '8080:8080'
+    
+    innodoxangular:
+          image: innodox-angular
+          ports:
+               - '8081:4200'
+          depends_on:
+               - innodoxhomework

@@ -16,3 +16,26 @@ Frontend start:
 > npm install
 
 > npm run start
+
+Dockerres használat:
+Backend:
+
+> mvn clean install
+
+> docker build -f Dockerfile -t innodox-homework . 
+
+
+Frontend:
+> cd angular
+
+> npm install
+
+> npm run build
+
+Futattás:
+
+Visszalépve a gyökérkönyvtárba:
+
+> docker-compose up -d 
+
+

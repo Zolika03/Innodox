@@ -28,20 +28,20 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
    @ViewChildren(SortableDirective) headers: QueryList<SortableDirective>;
 
     constructor(private userService: UserService,
-                private bookService: BookService,
+                private _bookService: BookService,
                 private modalService: NgbModal) {
-        this.books$ = bookService.books$;
-        this.total$ = bookService.total$;
+        this.books$ = _bookService.books$;
+        this.total$ = _bookService.total$;
     }
 
     ngOnInit() {
       const source = interval(60000); //Extra - pull-service
-      this.subscription = source.subscribe(val => this.bookService.refresh());
+      this.subscription = source.subscribe(val => this._bookService.refresh());
     }
   
     
     ngOnChanges(changes: SimpleChanges): void {
-        this.bookService.refresh();
+        this._bookService.refresh();
     }
   
     onSort({column, direction}: SortEvent) {
@@ -52,13 +52,13 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
       }
     });
 
-    this.bookService.sortColumn = column;
-    this.bookService.sortDirection = direction;
+    this._bookService.sortColumn = column;
+    this._bookService.sortDirection = direction;
   }
   
   borrow(bookId) {
-    this.bookService.borrow(bookId).subscribe(()=> {
-          this.bookService.refresh();
+    this._bookService.borrow(bookId).subscribe(()=> {
+          this._bookService.refresh();
           this.bookChange.emit(true);
         });
   }
@@ -67,6 +67,10 @@ export class HomeComponent implements OnInit, OnChanges, OnDestroy {
     const modalRef = this.modalService.open(NgbdModalContentComponent);
     modalRef.componentInstance.header = 'Előszó';
     modalRef.componentInstance.content = preface;
+  }
+  
+  get bookService() {
+  	return this._bookService;
   }
   
   ngOnDestroy() {
