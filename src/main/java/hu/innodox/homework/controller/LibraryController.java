@@ -36,7 +36,7 @@ public class LibraryController {
 	 */
 	@RequestMapping(value="/book", method=RequestMethod.GET)
 	public Iterable<Book> getBook() {
-		Iterable<Book> books = this.bookRepository.findAllAvailable();
+		Iterable<Book> books = this.bookRepository.findAll();
 		return books;
 	}
 
